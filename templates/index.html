@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>ATS + Voice + Agent Console</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <header class="hero">
+      <div class="logo">AI</div>
+      <div>
+        <h1>ATS + Voice + Agent Console</h1>
+        <p class="sub">One local dashboard: ATS resume match + record your voice samples + chat with your <b>AI Call Agent</b>.</p>
+      </div>
+    </header>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="ats">ATS Analyzer</button>
+      <button class="tab" data-tab="voice">My Voice (Record)</button>
+      <button class="tab" data-tab="agent">AI Call Agent (Chat)</button>
+    </div>
+
+    <!-- ATS TAB -->
+    <section class="panel active" id="tab-ats">
+      <div class="grid2">
+        <div class="card">
+          <h2>Resume Text</h2>
+          <textarea id="resumeText" placeholder="Paste resume text here..."></textarea>
+        </div>
+        <div class="card">
+          <h2>Job Description</h2>
+          <textarea id="jdText" placeholder="Paste job description here..."></textarea>
+          <div class="row">
+            <button id="sampleJdBtn" class="btn ghost">Use Sample JD</button>
+            <button id="runAtsBtn" class="btn primary">Analyze</button>
+            <button id="resetAtsBtn" class="btn">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="atsResults" style="display:none;">
+        <div class="row space">
+          <div>
+            <div class="label">Match Score</div>
+            <div class="score" id="atsScore">0%</div>
+            <div class="mini" id="atsNote"></div>
+          </div>
+          <div class="scorebar">
+            <div class="fill" id="atsFill"></div>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div>
+            <h3>Matched ✅</h3>
+            <div class="chips" id="matchedList"></div>
+          </div>
+          <div>
+            <h3>Missing ❌</h3>
+            <div class="row">
+              <button id="copyMissingBtn" class="btn tiny">Copy</button>
+            </div>
+            <div class="chips" id="missingList"></div>
+          </div>
+        </div>
+
+        <h3>Suggestions</h3>
+        <ul id="suggestions"></ul>
+      </div>
+    </section>
+
+    <!-- VOICE TAB -->
+    <section class="panel" id="tab-voice">
+      <div class="card">
+        <h2>Record & Save Your Voice Sample</h2>
+        <p class="mini">This records your microphone audio and saves it to <code>./speakers</code> on your PC. (No cloning.)</p>
+
+        <div class="row">
+          <button id="startRecBtn" class="btn primary">Start Recording</button>
+          <button id="stopRecBtn" class="btn" disabled>Stop</button>
+          <button id="uploadRecBtn" class="btn ghost" disabled>Upload</button>
+        </div>
+
+        <audio id="previewAudio" controls style="width:100%; margin-top:12px;"></audio>
+
+        <div class="row" style="margin-top:14px;">
+          <button id="refreshVoicesBtn" class="btn">Refresh Saved Samples</button>
+        </div>
+
+        <div id="voiceList" class="list"></div>
+      </div>
+
+      <div class="card">
+        <h2>Speak Text (No cloning)</h2>
+        <p class="mini">Uses your browser/device voices (speech synthesis).</p>
+        <textarea id="ttsText" placeholder="Type text to speak..."></textarea>
+        <div class="row">
+          <select id="voiceSelect"></select>
+          <button id="speakBtn" class="btn primary">Speak</button>
+          <button id="stopSpeakBtn" class="btn">Stop</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- AGENT TAB -->
+    <section class="panel" id="tab-agent">
+      <div class="card">
+        <h2>Connect to [AI Call Agent](https://microsoftapc-my.sharepoint.com/personal/v-ksaiavyakt_microsoft_com/Documents/Documents/AI%20Call%20Agent?web=1&EntityRepresentationId=29f41acf-cd04-44a0-b21f-6d4362ec6a77)</h2>
+        <p class="mini">
+          Your [AI Call Agent](https://microsoftapc-my.sharepoint.com/personal/v-ksaiavyakt_microsoft_com/Documents/Documents/AI%20Call%20Agent?web=1&EntityRepresentationId=29f41acf-cd04-44a0-b21f-6d4362ec6a77) uses [worker.js](https://microsoftapc-my.sharepoint.com/personal/v-ksaiavyakt_microsoft_com/Documents/Documents/AI%20Call%20Agent/worker.js?web=1&EntityRepresentationId=f91f32c6-36ab-450a-adf4-a3ec2945fffd) and exposes <code>/api/health</code> and <code>/api/chat</code>. 【1-4ac18d】【2-8c2683】
+          Paste your deployed worker URL below (example: <code>https://your-agent.workers.dev</code>).
+        </p>
+
+        <div class="row">
+          <input id="agentBaseUrl" class="input" placeholder="https://your-agent.workers.dev" />
+          <button id="checkAgentBtn" class="btn">Check Health</button>
+        </div>
+
+        <div class="mini" id="agentHealth"></div>
+      </div>
+
+      <div class="card chat">
+        <div class="chatlog" id="chatLog"></div>
+
+        <div class="row">
+          <input id="chatInput" class="input" placeholder="Type message..." />
+          <button id="sendChatBtn" class="btn primary">Send</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      Local Flask server • UI in /templates + /static • Samples in /speakers
+    </footer>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
